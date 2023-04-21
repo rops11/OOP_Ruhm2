@@ -1,14 +1,8 @@
 package com.oop.ruhm2;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -23,23 +17,24 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+
 public class SõneMäng extends Application {
     public static void main(String[] args) {
         launch(args);
     }
 
-    public static void mängi(Mängija mängija, SõneLugeja sõneLugeja, SõneAnalüsaator sõneAnalüsaator, String proovitavSõna, List<HBox> arvamisKastid, TextField tekstiRida, Label teade) throws IOException {
+    public static int mängi(Mängija mängija, SõneLugeja sõneLugeja, SõneAnalüsaator sõneAnalüsaator, String proovitavSõna, List<HBox> arvamisKastid, TextField tekstiRida, Label teade) throws IOException {
         String vihje = sõneAnalüsaator.annaVihje(proovitavSõna);
         int tulemus = sõneAnalüsaator.kontrolliVastust(proovitavSõna);
 
         if (tulemus == -1) {
-            return;
+            return -1;
         }
 
         String[] tükid = vihje.split("");
@@ -69,7 +64,7 @@ public class SõneMäng extends Application {
             case 1 : {
                 mängija.setVõite(mängija.getVõite()+1);
                 teade.setText("Õige vastus! " + "\nKas soovite jätkata? (jah/ei)");
-                break;
+                return 1;
             }
             default : {
                 break;
@@ -82,66 +77,24 @@ public class SõneMäng extends Application {
             mängija.setKaotusi(mängija.getKaotusi()+1);
             teade.setText("Katsete arv on täis. Sõna oli " + sõneAnalüsaator.getÕigeVastus()
                 + "\nKas soovite jätkata? (jah/ei)");
-            //tekstiRida.setText("\nKatsete arv on täis. Sõna oli " + sõneAnalüsaator.getÕigeVastus());
+            return 1;
         }
 
-        /*if (sõneAnalüsaator.kontrolliVastust(proovitavSõna) == 1) {
-            mängija.setVõite(mängija.getVõite()+1);
-            System.out.println("\nSõna on ära arvatud - "+sõneAnalüsaator.getÕigeVastus());
-            System.out.println("Kas soovite jätkata? (ei/jah)");
-            Scanner sisend = new Scanner(System.in);
-            String otsus = sisend.nextLine();
-
-            switch (otsus) {
-                case "jah" : sõneAnalüsaator = mängija.uusMäng(sõneLugeja.arvatavSõna(), 5); break;
-                case "ei" : System.out.println("võite: "+mängija.getVõite()+"; kaotusi: "+mängija.getKaotusi()+"; skoor: "+(mängija.getVõite()-mängija.getKaotusi())); return;
-                default : throw new RuntimeException("Tegevus ei ole lubatud!");
-            }
-        }*/
-
-        /*//Mäng lõpeb, kuna mängijal said katsed otsa
-        if (sõneAnalüsaator.getKatse() >= sõneAnalüsaator.getLubatudKatsied()) {
-            mängija.setKaotusi(mängija.getKaotusi()+1);
-            System.out.println("\nKatsete arv on täis. Sõna oli "+sõneAnalüsaator.getÕigeVastus());
-            System.out.println("Kas soovite jätkata? (ei/jah)");
-            Scanner sisend = new Scanner(System.in);
-            String otsus = sisend.nextLine();
-
-            switch (otsus) {
-                case "jah" : sõneAnalüsaator = mängija.uusMäng(sõneLugeja.arvatavSõna(), 5); break;
-                case "ei" : System.out.println("võite: "+mängija.getVõite()+"; kaotusi: "+mängija.getKaotusi()+"; skoor: "+(mängija.getVõite()-mängija.getKaotusi())); return;
-                default : throw new RuntimeException("Tegevus ei ole lubatud!");
-            }
-        }*/
+        return 0;
     }
-    @Override
-    public void start(Stage stage) throws IOException {
-        int lubatuidKatsied = 5;
 
-        SõneLugeja sõneLugeja = new SõneLugeja("testSõnad.txt");
-        Mängija mängija = new Mängija();
-
-        //System.out.println("Mängija peab ära arvama õige sõna. \n1) Suur täht tähistab äraarvatud tähte\n2) Väike täht tähistab tähte, mis on vales kohas\n3) \"_\" tähistab, et sellist tähte pole sõnas");
-        SõneAnalüsaator sõneAnalüsaator = mängija.uusMäng(sõneLugeja.arvatavSõna(), lubatuidKatsied);
-
-        Label teade = new Label("Alusta sõna arvamist!\n ");
-        teade.setTextAlignment(TextAlignment.CENTER);
-        teade.setFont(Font.font("Arial", FontWeight.BOLD, 12));
-        StackPane teatePaneel = new StackPane();
-        teatePaneel.getChildren().add(teade);
-
+    public static List<HBox> uusMänguväli(BorderPane juurpaigutus,int lubatuidKatsied, int vastusePikkus) {
         //Kõikide arvamiste paigutus ülevalt alla
         VBox kõikArvamisedKast = new VBox();
         kõikArvamisedKast.setSpacing(2);
         kõikArvamisedKast.setAlignment(Pos.BOTTOM_CENTER);
 
-        //Arvamise paigutus horisontaalne
         List<HBox> arvamisKastid = new ArrayList<>();
         for (int i = 0; i < lubatuidKatsied; i++) {
             HBox arvamiseKast = new HBox();
             arvamiseKast.setSpacing(2);
 
-            for (int j = 0; j < sõneAnalüsaator.getÕigeVastus().length(); j++) {
+            for (int j = 0; j < vastusePikkus; j++) {
                 Rectangle kast = new Rectangle(50,50);
                 kast.setFill(Color.TRANSPARENT);
                 kast.setStroke(Color.rgb(59,59,59));
@@ -149,7 +102,7 @@ public class SõneMäng extends Application {
 
                 Text tekst = new Text("");
                 tekst.setFont(Font.font("Arial", FontWeight.BOLD, 30));
-                tekst.setFill(Color.rgb(255,245,245));
+                tekst.setFill(Color.rgb(255,255,255));
 
                 StackPane stackPane = new StackPane();
                 stackPane.getChildren().addAll(kast, tekst);
@@ -161,13 +114,51 @@ public class SõneMäng extends Application {
             arvamisKastid.add(arvamiseKast);
         }
 
+        juurpaigutus.setCenter(kõikArvamisedKast);
+
+        return arvamisKastid;
+    }
+    @Override
+    public void start(Stage stage) throws IOException {
+        int lubatuidKatsied = 5;
+
+        SõneLugeja sõneLugeja = new SõneLugeja("testSõnad.txt");
+        Mängija mängija = new Mängija();
+        AtomicReference<SõneAnalüsaator> sõneAnalüsaator = new AtomicReference<>(mängija.uusMäng(sõneLugeja.arvatavSõna(), lubatuidKatsied));
+        AtomicBoolean mängKäib = new AtomicBoolean(true);
+
+        //Tekitame teate paneeli
+        Label teade = new Label("Alusta sõna arvamist!\n ");
+        teade.setTextAlignment(TextAlignment.CENTER);
+        teade.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        StackPane teatePaneel = new StackPane();
+        teatePaneel.getChildren().add(teade);
+
+        //Tekitame juur paigutuse ja mänguvälja
+        BorderPane juurpaigutus = new BorderPane();
+        final List<HBox>[] arvamisKastid = new List[]{uusMänguväli(juurpaigutus, lubatuidKatsied, sõneAnalüsaator.get().getÕigeVastus().length())};
+
         //Tekitame sisestuskasti:
         TextField tekstiRida = new TextField();
         tekstiRida.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 String tekst = tekstiRida.getText();
                 try {
-                    mängi(mängija, sõneLugeja, sõneAnalüsaator, tekst, arvamisKastid, tekstiRida, teade);
+                    if (mängKäib.get() == true) {
+                        if (mängi(mängija, sõneLugeja, sõneAnalüsaator.get(), tekst, arvamisKastid[0], tekstiRida, teade) == 1) {
+                            mängKäib.set(false);
+                        };
+                    } else {
+                        if (tekst.equals("jah")) {
+                            sõneAnalüsaator.set(mängija.uusMäng(sõneLugeja.arvatavSõna(), 5));
+                            arvamisKastid[0] = uusMänguväli(juurpaigutus, lubatuidKatsied, sõneAnalüsaator.get().getÕigeVastus().length());
+                            stage.sizeToScene();
+                            mängKäib.set(true);
+                        } else if (tekst.equals("ei")) {
+                            teade.setText("Võite ristist mängu sulgeda \ntulemus on salvestatud");
+                            tekstiRida.setDisable(true);
+                        }
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -175,9 +166,7 @@ public class SõneMäng extends Application {
             }
         });
 
-        BorderPane juurpaigutus = new BorderPane();
         juurpaigutus.setTop(teatePaneel);
-        juurpaigutus.setCenter(kõikArvamisedKast);
         juurpaigutus.setBottom(tekstiRida);
 
         // Koostame üldise aknastruktuuri:
@@ -187,41 +176,5 @@ public class SõneMäng extends Application {
         stage.setResizable(false);
         stage.setTitle("Sõna Mäng");
         stage.show();
-
-        /*while (true) {
-            Scanner sisestatudSõna = new Scanner(System.in);
-            String proovitavSõna = sisestatudSõna.nextLine();
-            sõneAnalüsaator.setKatse(sõneAnalüsaator.getKatse()+1);
-
-            //Mäng lõpeb, kuna mängija arvas sõna ära
-            if (sõneAnalüsaator.kontrolliVastust(proovitavSõna)) {
-                mängija.setVõite(mängija.getVõite()+1);
-                System.out.println("\nSõna on ära arvatud - "+sõneAnalüsaator.getÕigeVastus());
-                System.out.println("Kas soovite jätkata? (ei/jah)");
-                Scanner sisend = new Scanner(System.in);
-                String otsus = sisend.nextLine();
-
-                switch (otsus) {
-                    case "jah" : sõneAnalüsaator = mängija.uusMäng(sõneLugeja.arvatavSõna(), 5); break;
-                    case "ei" : System.out.println("võite: "+mängija.getVõite()+"; kaotusi: "+mängija.getKaotusi()+"; skoor: "+(mängija.getVõite()-mängija.getKaotusi())); return;
-                    default : throw new RuntimeException("Tegevus ei ole lubatud!");
-                }
-            }
-
-            //Mäng lõpeb, kuna mängijal said katsed otsa
-            if (sõneAnalüsaator.getKatse() >= sõneAnalüsaator.getLubatudKatsied()) {
-                mängija.setKaotusi(mängija.getKaotusi()+1);
-                System.out.println("\nKatsete arv on täis. Sõna oli "+sõneAnalüsaator.getÕigeVastus());
-                System.out.println("Kas soovite jätkata? (ei/jah)");
-                Scanner sisend = new Scanner(System.in);
-                String otsus = sisend.nextLine();
-
-                switch (otsus) {
-                    case "jah" : sõneAnalüsaator = mängija.uusMäng(sõneLugeja.arvatavSõna(), 5); break;
-                    case "ei" : System.out.println("võite: "+mängija.getVõite()+"; kaotusi: "+mängija.getKaotusi()+"; skoor: "+(mängija.getVõite()-mängija.getKaotusi())); return;
-                    default : throw new RuntimeException("Tegevus ei ole lubatud!");
-                }
-            }
-        }*/
     }
 }
