@@ -49,21 +49,8 @@ public class SõneAnalüsaator {
 
         return tagasta;
     }
-    public boolean kontrolliVastust(String pakkumine) {
-        //ei pea oluliseks, kas mängija sisestab suuri või väikeseid tähti
-        pakkumine = pakkumine.toLowerCase();
 
-        //Kontrollime, et sõne pikkus oleks sama, mis vastusel
-        if (õigeVastus.length() != pakkumine.length()) {
-            System.out.println("Sõne pikkus ei klapi (oodati " + õigeVastus.length() + " tähte, saadi " + pakkumine.length() + " tähte)");
-            return false;
-        }
-
-        //Kontrollime, kas vastati õigesti
-        if (pakkumine.equals(õigeVastus)) {
-            return true; //Sõna on ära arvatud
-        }
-
+    public String annaVihje(String pakkumine) {
         //Kontrollime, mis tähed õigesti arvati
         String vihje = "";
         String[] tähedpakkumine = pakkumine.split("");
@@ -95,8 +82,31 @@ public class SõneAnalüsaator {
             }
         }
 
-        System.out.println(vihje);
-        return false; //Sõna ei ole ära arvatud
+        //System.out.println(vihje);
+        return vihje;
+    }
+    public int kontrolliVastust(String pakkumine) {
+        /*
+        -1 vale sisend
+        0 vale vastus
+        1 õige vastus
+         */
+
+        //ei pea oluliseks, kas mängija sisestab suuri või väikeseid tähti
+        pakkumine = pakkumine.toLowerCase();
+
+        //Kontrollime, et sõne pikkus oleks sama, mis vastusel
+        if (õigeVastus.length() != pakkumine.length()) {
+            System.out.println("Sõne pikkus ei klapi (oodati " + õigeVastus.length() + " tähte, saadi " + pakkumine.length() + " tähte)");
+            return -1;
+        }
+
+        //Kontrollime, kas vastati õigesti
+        if (pakkumine.equals(õigeVastus)) {
+            return 1; //Sõna on ära arvatud
+        }
+
+        return 0; //Sõna ei ole ära arvatud
     }
 }
 
