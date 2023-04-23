@@ -18,6 +18,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -155,7 +157,16 @@ public class SõneMäng extends Application {
                             stage.sizeToScene();
                             mängKäib.set(true);
                         } else if (tekst.equals("ei")) {
-                            teade.setText("Võite ristist mängu sulgeda \ntulemus on salvestatud");
+                            teade.setText("Võite ristist mängu sulgeda \ntulemus on salvestatud "+"("+mängija.skoor()+")");
+                            try{
+                                FileWriter failKirjutamine = new FileWriter("skoor.txt");
+                                failKirjutamine.write(Integer.toString(mängija.skoor()));
+                                failKirjutamine.close();
+                            } catch (IOException e) {
+                                System.out.println("Skoori salvestamine ebaonnestus");
+                            }
+
+
                             tekstiRida.setDisable(true);
                         }
                     }
