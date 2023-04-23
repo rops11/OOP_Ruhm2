@@ -31,7 +31,7 @@ public class SõneMäng extends Application {
         launch(args);
     }
 
-    public static int mängi(Mängija mängija, SõneLugeja sõneLugeja, SõneAnalüsaator sõneAnalüsaator, String proovitavSõna, List<HBox> arvamisKastid, TextField tekstiRida, Label teade) throws IOException {
+    public static int mängi(Mängija mängija, SõneAnalüsaator sõneAnalüsaator, String proovitavSõna, List<HBox> arvamisKastid, Label teade) throws IOException {
         String vihje = sõneAnalüsaator.annaVihje(proovitavSõna);
         int tulemus = sõneAnalüsaator.kontrolliVastust(proovitavSõna);
 
@@ -147,7 +147,7 @@ public class SõneMäng extends Application {
                 String tekst = tekstiRida.getText();
                 try {
                     if (mängKäib.get() == true) {
-                        if (mängi(mängija, sõneLugeja, sõneAnalüsaator.get(), tekst, arvamisKastid[0], tekstiRida, teade) == 1) {
+                        if (mängi(mängija, sõneAnalüsaator.get(), tekst, arvamisKastid[0], teade) == 1) {
                             mängKäib.set(false);
                         };
                     } else {

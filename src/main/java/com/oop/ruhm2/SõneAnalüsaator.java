@@ -46,7 +46,7 @@ public class SõneAnalüsaator {
                 tagasta.put(täht, 1);
             }
         }
-
+        System.out.println(tagasta);
         return tagasta;
     }
 
@@ -63,7 +63,7 @@ public class SõneAnalüsaator {
         for (int i = 0; i < tähedpakkumine.length; i++) {
             char otsitavSümbol = tähedpakkumine[i].charAt(0);
 
-            if (tähedpakkumine[i].equals(tähedÕigeVastus[i])) {
+            if (tähedpakkumine[i].equals(tähedÕigeVastus[i]) && uniaalseteSümboliteArvVastus.get(otsitavSümbol) > 0) {
                 vihje += tähedpakkumine[i].toUpperCase();
                 uniaalseteSümboliteArvVastus.put(otsitavSümbol, uniaalseteSümboliteArvVastus.get(otsitavSümbol) - 1);
                 if (uniaalseteSümboliteArvVastus.get(otsitavSümbol) < 1) {

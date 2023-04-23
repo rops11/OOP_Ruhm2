@@ -28,7 +28,7 @@ mees
 seep
 keep
 karp
-joppe
+jope
 auto
 jalg
 käsi
