@@ -12,8 +12,9 @@ public class Mängija {
         File file = new File("skoor.txt");
         Scanner reader = new Scanner(file);
         String rida = reader.nextLine();
-        this.võite = Integer.parseInt(rida);
-        this.kaotusi = 0;
+        String[] ridaTykeldatud = rida.split(" ");
+        this.võite = Integer.parseInt(ridaTykeldatud[0]);
+        this.kaotusi = Integer.parseInt(ridaTykeldatud[1]);
     }
 
     public int getVõite() {

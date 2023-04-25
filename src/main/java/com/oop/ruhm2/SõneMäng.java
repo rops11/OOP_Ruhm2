@@ -157,10 +157,10 @@ public class SõneMäng extends Application {
                             stage.sizeToScene();
                             mängKäib.set(true);
                         } else if (tekst.equals("ei")) {
-                            teade.setText("Võite ristist mängu sulgeda \ntulemus on salvestatud "+"("+mängija.skoor()+")");
+                            teade.setText("Võite ristist mängu sulgeda \ntulemus on salvestatud "+"V: "+mängija.getVõite()+" K: "+mängija.getKaotusi()+" ("+mängija.skoor()+")");
                             try{
                                 FileWriter failKirjutamine = new FileWriter("skoor.txt");
-                                failKirjutamine.write(Integer.toString(mängija.skoor()));
+                                failKirjutamine.write(Integer.toString(mängija.getVõite())+" "+Integer.toString(mängija.getKaotusi()));
                                 failKirjutamine.close();
                             } catch (IOException e) {
                                 System.out.println("Skoori salvestamine ebaonnestus");
