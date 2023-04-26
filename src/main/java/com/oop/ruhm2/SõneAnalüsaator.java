@@ -46,7 +46,7 @@ public class SõneAnalüsaator {
                 tagasta.put(täht, 1);
             }
         }
-        System.out.println(tagasta);
+        //System.out.println(tagasta);
         return tagasta;
     }
 
@@ -57,27 +57,23 @@ public class SõneAnalüsaator {
         String[] tähedÕigeVastus = õigeVastus.split("");
         Map<Character, Integer> uniaalseteSümboliteArvVastus = unikaalseteSümboliteArv(õigeVastus);
 
-        //Kuvab suurt tähte, kui täht on õiges kohas
-        //Kuvab väikest tähte, kui sisaldab tähte, aga täht on vales kohas
-        //Kuvab "_", kui tähte ei ole üldse sõnas või samu tähti on üleliia.
         for (int i = 0; i < tähedpakkumine.length; i++) {
             char otsitavSümbol = tähedpakkumine[i].charAt(0);
-
-            if (tähedpakkumine[i].equals(tähedÕigeVastus[i]) && uniaalseteSümboliteArvVastus.get(otsitavSümbol) > 0) {
-                vihje += tähedpakkumine[i].toUpperCase();
-                uniaalseteSümboliteArvVastus.put(otsitavSümbol, uniaalseteSümboliteArvVastus.get(otsitavSümbol) - 1);
-                if (uniaalseteSümboliteArvVastus.get(otsitavSümbol) < 1) {
-                    uniaalseteSümboliteArvVastus.remove(otsitavSümbol);
+            if (uniaalseteSümboliteArvVastus.containsKey(otsitavSümbol)) {
+                if (tähedpakkumine[i].equals(tähedÕigeVastus[i]) && uniaalseteSümboliteArvVastus.get(otsitavSümbol) > 0) {
+                    vihje += tähedpakkumine[i].toUpperCase();
+                    uniaalseteSümboliteArvVastus.put(otsitavSümbol, uniaalseteSümboliteArvVastus.get(otsitavSümbol) - 1);
+                    if (uniaalseteSümboliteArvVastus.get(otsitavSümbol) < 1) {
+                        uniaalseteSümboliteArvVastus.remove(otsitavSümbol);
+                    }
+                } else {
+                    vihje += tähedpakkumine[i].toLowerCase();
+                    uniaalseteSümboliteArvVastus.put(otsitavSümbol, uniaalseteSümboliteArvVastus.get(otsitavSümbol) - 1);
+                    if (uniaalseteSümboliteArvVastus.get(otsitavSümbol) < 1) {
+                        uniaalseteSümboliteArvVastus.remove(otsitavSümbol);
+                    }
                 }
-            }
-            else if (uniaalseteSümboliteArvVastus.containsKey(otsitavSümbol)) {
-                vihje += tähedpakkumine[i].toLowerCase();
-                uniaalseteSümboliteArvVastus.put(otsitavSümbol, uniaalseteSümboliteArvVastus.get(otsitavSümbol) - 1);
-                if (uniaalseteSümboliteArvVastus.get(otsitavSümbol) < 1) {
-                    uniaalseteSümboliteArvVastus.remove(otsitavSümbol);
-                }
-            }
-            else {
+            } else {
                 vihje += "_";
             }
         }
@@ -86,19 +82,14 @@ public class SõneAnalüsaator {
         return vihje;
     }
     public int kontrolliVastust(String pakkumine) {
-        /*
-        -1 vale sisend
-        0 vale vastus
-        1 õige vastus
-         */
-
         //ei pea oluliseks, kas mängija sisestab suuri või väikeseid tähti
         pakkumine = pakkumine.toLowerCase();
 
         //Kontrollime, et sõne pikkus oleks sama, mis vastusel
         if (õigeVastus.length() != pakkumine.length()) {
-            System.out.println("Sõne pikkus ei klapi (oodati " + õigeVastus.length() + " tähte, saadi " + pakkumine.length() + " tähte)");
-            return -1;
+            //System.out.println("Sõne pikkus ei klapi (oodati " + õigeVastus.length() + " tähte, saadi " + pakkumine.length() + " tähte)");
+            throw new ValePikkusErind("Sõne pikkus ei klapi (oodati " + õigeVastus.length() + " tähte, saadi " + pakkumine.length() + " tähte)");
+            //return -1;
         }
 
         //Kontrollime, kas vastati õigesti

@@ -32,54 +32,54 @@ public class SõneMäng extends Application {
     }
 
     public static int mängi(Mängija mängija, SõneAnalüsaator sõneAnalüsaator, String proovitavSõna, List<HBox> arvamisKastid, Label teade) throws IOException {
-        String vihje = sõneAnalüsaator.annaVihje(proovitavSõna);
-        int tulemus = sõneAnalüsaator.kontrolliVastust(proovitavSõna);
+        try {
+            int tulemus = sõneAnalüsaator.kontrolliVastust(proovitavSõna);
+            String vihje = sõneAnalüsaator.annaVihje(proovitavSõna);
 
-        if (tulemus == -1) {
-            return -1;
-        }
+            String[] tükid = vihje.split("");
+            for (int i = 0; i < tükid.length; i++) {
+                char täht = tükid[i].charAt(0);
+                char pärisTäht = proovitavSõna.toUpperCase().charAt(i);
 
-        String[] tükid = vihje.split("");
-        for (int i = 0; i < tükid.length; i++) {
-            char täht = tükid[i].charAt(0);
-            char pärisTäht = proovitavSõna.toUpperCase().charAt(i);
+                StackPane täheKast = (StackPane) arvamisKastid.get(sõneAnalüsaator.getKatse()).getChildren().get(i);
+                Rectangle kast = (Rectangle) täheKast.getChildren().get(0);
+                Text tekst = (Text) täheKast.getChildren().get(1);
 
-            StackPane täheKast = (StackPane) arvamisKastid.get(sõneAnalüsaator.getKatse()).getChildren().get(i);
-            Rectangle kast = (Rectangle) täheKast.getChildren().get(0);
-            Text tekst = (Text) täheKast.getChildren().get(1);
-
-            tekst.setText(Character.toString(pärisTäht));
-            if (täht == '_') {
-                kast.setFill(Color.rgb(59,59,59));
-            } else if (Character.isLowerCase(täht)) {
-                kast.setFill(Color.rgb(201,159,25));
-            } else if (Character.isUpperCase(täht)) {
-                kast.setFill(Color.rgb(25, 201, 25));
+                tekst.setText(Character.toString(pärisTäht));
+                if (täht == '_') {
+                    kast.setFill(Color.rgb(59,59,59));
+                } else if (Character.isLowerCase(täht)) {
+                    kast.setFill(Color.rgb(201,159,25));
+                } else if (Character.isUpperCase(täht)) {
+                    kast.setFill(Color.rgb(25, 201, 25));
+                }
             }
-        }
 
-        switch (tulemus) {
-            case 0 : {
-                teade.setText("Vale vastus arva uuesti");
-                break;
+            switch (tulemus) {
+                case 0 : {
+                    teade.setText("Vale vastus arva uuesti");
+                    break;
+                }
+                case 1 : {
+                    mängija.setVõite(mängija.getVõite()+1);
+                    teade.setText("Õige vastus! " + "\nKas soovite jätkata? (jah/ei)");
+                    return 1;
+                }
+                default : {
+                    break;
+                }
             }
-            case 1 : {
-                mängija.setVõite(mängija.getVõite()+1);
-                teade.setText("Õige vastus! " + "\nKas soovite jätkata? (jah/ei)");
+
+            sõneAnalüsaator.setKatse(sõneAnalüsaator.getKatse()+1);
+
+            if (sõneAnalüsaator.getKatse() >= sõneAnalüsaator.getLubatudKatsied()) {
+                mängija.setKaotusi(mängija.getKaotusi()+1);
+                teade.setText("Katsete arv on täis. Sõna oli " + sõneAnalüsaator.getÕigeVastus()
+                        + "\nKas soovite jätkata? (jah/ei)");
                 return 1;
             }
-            default : {
-                break;
-            }
-        }
-
-        sõneAnalüsaator.setKatse(sõneAnalüsaator.getKatse()+1);
-
-        if (sõneAnalüsaator.getKatse() >= sõneAnalüsaator.getLubatudKatsied()) {
-            mängija.setKaotusi(mängija.getKaotusi()+1);
-            teade.setText("Katsete arv on täis. Sõna oli " + sõneAnalüsaator.getÕigeVastus()
-                + "\nKas soovite jätkata? (jah/ei)");
-            return 1;
+        } catch (ValePikkusErind e) {
+            teade.setText("Sisestati vale pikusega sõna!");
         }
 
         return 0;
@@ -121,7 +121,7 @@ public class SõneMäng extends Application {
         return arvamisKastid;
     }
     @Override
-    public void start(Stage stage) throws IOException,failiErind {
+    public void start(Stage stage) throws IOException {
         int lubatuidKatsied = 5;
 
         SõneLugeja sõneLugeja = new SõneLugeja("testSõnad.txt");

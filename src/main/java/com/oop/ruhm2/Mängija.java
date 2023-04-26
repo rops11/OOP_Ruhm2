@@ -8,7 +8,7 @@ public class Mängija {
     private int võite;
     private int kaotusi;
 
-    public Mängija() throws FileNotFoundException,failiErind {
+    public Mängija() throws FileNotFoundException {
         File file = new File("skoor.txt");
         Scanner reader = new Scanner(file);
         String rida = reader.nextLine();
@@ -17,7 +17,7 @@ public class Mängija {
             this.võite = Integer.parseInt(ridaTykeldatud[0]);
             this.kaotusi = Integer.parseInt(ridaTykeldatud[1]);
         } else {
-            throw new failiErind();
+            throw new FailiErind("Peab olema 2 värtust skoor.txt failis");
         }
     }
 
