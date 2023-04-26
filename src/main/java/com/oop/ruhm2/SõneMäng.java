@@ -121,7 +121,7 @@ public class SõneMäng extends Application {
         return arvamisKastid;
     }
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException,failiErind {
         int lubatuidKatsied = 5;
 
         SõneLugeja sõneLugeja = new SõneLugeja("testSõnad.txt");

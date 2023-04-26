@@ -8,13 +8,17 @@ public class Mängija {
     private int võite;
     private int kaotusi;
 
-    public Mängija() throws FileNotFoundException {
+    public Mängija() throws FileNotFoundException,failiErind {
         File file = new File("skoor.txt");
         Scanner reader = new Scanner(file);
         String rida = reader.nextLine();
         String[] ridaTykeldatud = rida.split(" ");
-        this.võite = Integer.parseInt(ridaTykeldatud[0]);
-        this.kaotusi = Integer.parseInt(ridaTykeldatud[1]);
+        if (ridaTykeldatud.length == 2){
+            this.võite = Integer.parseInt(ridaTykeldatud[0]);
+            this.kaotusi = Integer.parseInt(ridaTykeldatud[1]);
+        } else {
+            throw new failiErind();
+        }
     }
 
     public int getVõite() {
