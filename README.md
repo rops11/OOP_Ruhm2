@@ -3,7 +3,7 @@ Autorid: Robert Ivask ja Vladimir Makarenkov
 <br><br>
 Meie tehtud sõna mängu inspiratsiooniks oli Wordle.
 <br><br>
-Kuidas käivitada? -> (vaja täiendada...)
+Kuidas käivitada? -> Käivitama peab Launcher.java faili
 
 Kuidas mängida? -> Mängija peab ära arvama õige sõna. 
 * Roheline värv tähistab äraarvatud tähte
