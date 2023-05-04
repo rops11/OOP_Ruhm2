@@ -21,7 +21,7 @@ Projekti töökäik 1 osa
 * Robert tegeles sõneAnalüsaatori ja Mängija klassidega ja kõikide meetoditega nendes ning realiseeris neid sõneMäng klassis. Kokku selleks kulus umbes 6 tundi. 
 * Vladimir tegeles sõneLugeja klassiga ja kõikide meetoditega selles ning realiseeris neid sõneMäng klassis. Kokku selleks kulus umbes 5 tundi.
 
-Projekti töökäik 1 osa
+Projekti töökäik 2 osa
 * Robert tegeles graafilise poolega. Kokku selleks kulus umbes 6 tundi.
 * Vladimir tegeles (vaja täiendada...)
 
