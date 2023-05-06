@@ -2,6 +2,7 @@ package com.oop.ruhm2;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -129,6 +130,9 @@ public class SõneMäng extends Application {
         AtomicReference<SõneAnalüsaator> sõneAnalüsaator = new AtomicReference<>(mängija.uusMäng(sõneLugeja.arvatavSõna(), lubatuidKatsied));
         AtomicBoolean mängKäib = new AtomicBoolean(true);
 
+
+
+
         //Tekitame teate paneeli
         Label teade = new Label("Alusta sõna arvamist!\n ");
         teade.setTextAlignment(TextAlignment.CENTER);
@@ -180,6 +184,8 @@ public class SõneMäng extends Application {
         juurpaigutus.setTop(teatePaneel);
         juurpaigutus.setBottom(tekstiRida);
 
+
+
         // Koostame üldise aknastruktuuri:
         Scene scene = new Scene(juurpaigutus);
         scene.setFill(Color.rgb(25,25,25));
@@ -187,5 +193,16 @@ public class SõneMäng extends Application {
         stage.setResizable(false);
         stage.setTitle("Sõna Mäng");
         stage.show();
+
+
+        Stage kirjelduseLava = new Stage();
+        kirjelduseLava.setTitle("Mängu kirjeldus");
+        VBox layout = new VBox(25);
+        Text kirjelduseTekst = new Text("Mängu kirjeldus :  arva ära sõna. Kui mingi tähe ruut muutub kollaseks, siis see täht on vales kohas. Kui ruut tähega muutub roheliseks, siis täht on õigel kohal. Kirjelduse saab panna kinni ristist.");
+        layout.getChildren().add(kirjelduseTekst);
+        Scene kirjelduseStseen = new Scene(layout, 200, 200);
+        kirjelduseLava.setScene(kirjelduseStseen);
+        kirjelduseTekst.wrappingWidthProperty().bind(kirjelduseStseen.widthProperty().subtract(15));
+        kirjelduseLava.show();
     }
 }
