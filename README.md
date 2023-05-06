@@ -23,7 +23,7 @@ Projekti töökäik 1 osa
 
 Projekti töökäik 2 osa
 * Robert tegeles graafilise poolega. Kokku selleks kulus umbes 6 tundi.
-* Vladimir tegeles (vaja täiendada...)
+* Vladimir tegeles skoori salvestamise, lugemisega ja resizeable aknaga. Kokku selleks kulus umbes 5 tundi.
 
 Tegemise mured
 * Üldiselt projekti tegemisel ei esinenud probleeme ning see valmis sujuvalt.
